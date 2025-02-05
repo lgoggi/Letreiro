@@ -20,6 +20,9 @@ Este é um aplicativo Android desenvolvido em Kotlin que permite aos usuários c
 * Firebase Auth
 * Firebase RealtimeDB
 
+# Rodando localmente
+Para rodar localmente, conecte sua conta firebase dentro do Android Studio ou insira o arquivo google-services.json dentro da pasta app
+
 # SNAPSHOTS
 ![image](https://github.com/user-attachments/assets/ced7ddc8-9b37-4a9f-8c30-66e9ba3f4323)
 
