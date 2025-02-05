@@ -25,5 +25,5 @@ Este é um aplicativo Android desenvolvido em Kotlin que permite aos usuários c
 
 ![image](https://github.com/user-attachments/assets/fc2ccc51-1497-4a29-85de-d115ae87e4b0)
 
-
-
+# NOTA
+ Considerando que as APIS utilizadas são gratuitas e serão destruídas ao fim do processo, decidi, por conveniência para o avaliador, deixá-las expostas no programa.
