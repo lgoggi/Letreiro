@@ -1,6 +1,9 @@
 package com.example.letreiro.fragments
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +56,6 @@ class AddMovieDialogFragment : DialogFragment() {
 
         binding.addMovieButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
-                Log.v("tag erro", "rodou")
                 val response = try {
                     RetrofitInstance.api.getMovie("f4cd5d6c", binding.movieEditText.text.toString())
                 } catch (e: HttpException) {
@@ -64,15 +66,20 @@ class AddMovieDialogFragment : DialogFragment() {
                     return@launch
                 }
 
-                if (response.isSuccessful && response.body() != null) {
+                if (response.isSuccessful && response.body() != null && response.body()!!.Response.toString() != "False") {
                     Log.v("tag", response.body().toString())
                     var movieHashmap = mutableMapOf<String, String>()
                     movieHashmap["name"] = response.body()!!.Title.toString()
                     movieHashmap["director"] = response.body()!!.Director.toString()
                     movieHashmap["year"] = response.body()!!.Year.toString()
+                    movieHashmap["poster"] = response.body()!!.Poster.toString()
 
                     listener.onSaveMovie(movieHashmap, binding.movieEditText)
                     dismiss()
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "movie not found", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 

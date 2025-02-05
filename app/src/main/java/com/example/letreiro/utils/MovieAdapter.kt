@@ -3,8 +3,10 @@ package com.example.letreiro.utils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.letreiro.databinding.MovieItemBinding
+import com.squareup.picasso.Picasso
 
 class MovieAdapter(private val list: MutableList<MovieData>) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -32,6 +34,7 @@ class MovieAdapter(private val list: MutableList<MovieData>) :
                 binding.movieName.text = this.name
                 binding.movieDirector.text = this.director
                 binding.movieYear.text = this.year
+                setPosterImage(this.poster, binding.moviePoster)
                 if (this.watched) {
                     binding.watchIcon.visibility = View.INVISIBLE
                     binding.watchedIcon.visibility = View.VISIBLE
@@ -53,6 +56,10 @@ class MovieAdapter(private val list: MutableList<MovieData>) :
 
             }
         }
+    }
+
+    private fun setPosterImage(url: String, imageView: ImageView) {
+        Picasso.get().load(url).into(imageView)
     }
 
     interface MovieAdapterClickInterface {

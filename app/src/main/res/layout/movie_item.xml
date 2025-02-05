@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="#2D2D2D"
-        android:layout_marginVertical="4dp">
+        android:layout_margin="8dp">
 
 
         <ImageView
@@ -59,37 +59,42 @@
             app:layout_constraintStart_toEndOf="@+id/moviePoster"
             app:layout_constraintTop_toTopOf="@+id/moviePoster" />
 
+
         <ImageView
             android:id="@+id/watchIcon"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginEnd="65dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/deleteIcon"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/deleteIcon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.232"
             app:srcCompat="@drawable/baseline_watch_24" />
+
         <ImageView
             android:id="@+id/watchedIcon"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginEnd="65dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/deleteIcon"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/deleteIcon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.232"
             app:srcCompat="@drawable/baseline_watched_24" />
-
 
         <ImageView
             android:id="@+id/deleteIcon"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginEnd="35dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/watchedIcon"
+            app:layout_constraintVertical_bias="0.767"
             app:srcCompat="@drawable/baseline_delete_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

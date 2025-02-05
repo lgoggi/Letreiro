@@ -85,7 +85,8 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
                         newMovieHolder["name"] as String,
                         newMovieHolder["director"] as String,
                         newMovieHolder["year"] as String,
-                        if (newMovieHolder["watched"] == null) false else newMovieHolder["watched"] as Boolean
+                        if (newMovieHolder["watched"] == null) false else newMovieHolder["watched"] as Boolean,
+                        newMovieHolder["poster"] as String,
                     )
                     movieList.add(newMovie as MovieData)
 
@@ -118,7 +119,8 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
             movieData.name,
             movieData.director,
             movieData.year,
-            !movieData.watched
+            !movieData.watched,
+            movieData.poster
         )
         map[movieData.movieId] = newMovie
         database.updateChildren(map)

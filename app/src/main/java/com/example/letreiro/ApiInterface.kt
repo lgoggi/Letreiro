@@ -15,5 +15,7 @@ interface ApiInterface {
 data class MovieResponse (
     val Title: String,
     val Director: String,
-    val Year: String
+    val Year: String,
+    val Poster: String,
+    val Response: String
 )
