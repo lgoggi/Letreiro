@@ -1,13 +1,23 @@
 package com.example.letreiro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.letreiro.databinding.FragmentAddMovieBinding
 import com.example.letreiro.utils.MovieData
+import com.example.letreiro.utils.RetrofitInstance
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
+
 
 class AddMovieDialogFragment : DialogFragment() {
     private lateinit var binding: FragmentAddMovieBinding
@@ -42,20 +52,35 @@ class AddMovieDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addMovieButton.setOnClickListener {
-            var movieHashmap = mutableMapOf<String, String>()
-            movieHashmap["name"] = binding.movieEditText.text.toString()
-            movieHashmap["director"] = "director"
-            movieHashmap["year"] = "2001"
+            GlobalScope.launch(Dispatchers.IO) {
+                Log.v("tag erro", "rodou")
+                val response = try {
+                    RetrofitInstance.api.getMovie("f4cd5d6c", binding.movieEditText.text.toString())
+                } catch (e: HttpException) {
+                    Log.v("error", e.message())
+                    return@launch
+                } catch (e: IOException) {
+                    Log.v("error", e.message.toString())
+                    return@launch
+                }
 
+                if (response.isSuccessful && response.body() != null) {
+                    Log.v("tag", response.body().toString())
+                    var movieHashmap = mutableMapOf<String, String>()
+                    movieHashmap["name"] = response.body()!!.Title.toString()
+                    movieHashmap["director"] = response.body()!!.Director.toString()
+                    movieHashmap["year"] = response.body()!!.Year.toString()
 
-            listener.onSaveMovie(movieHashmap, binding.movieEditText)
-            dismiss()
+                    listener.onSaveMovie(movieHashmap, binding.movieEditText)
+                    dismiss()
+                }
+            }
+
         }
         binding.closeButton.setOnClickListener {
             dismiss()
         }
     }
-
 
     interface OnDialogNextBtnClickListener {
         fun onSaveMovie(movie: MutableMap<String, String>, movieEdit: TextInputEditText)

@@ -1,6 +1,5 @@
 package com.example.letreiro.fragments
 
-import android.graphics.Movie
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,14 +27,14 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
     private lateinit var database: DatabaseReference
     private lateinit var navControl: NavController
     private lateinit var binding: FragmentHomeBinding
-    private var addMovieFrag : AddMovieDialogFragment? = null
+    private var addMovieFrag: AddMovieDialogFragment? = null
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var movieList: MutableList<MovieData>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,7 +45,7 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
         init(view)
         getMovieList()
 
-        binding.addMovieButton.setOnClickListener{
+        binding.addMovieButton.setOnClickListener {
             if (addMovieFrag != null) {
                 childFragmentManager.beginTransaction().remove(addMovieFrag!!).commit()
             }
@@ -63,7 +62,8 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
     private fun init(view: View) {
         navControl = Navigation.findNavController(view)
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference.child("movies").child(auth.currentUser?.uid.toString())
+        database = FirebaseDatabase.getInstance().reference.child("movies")
+            .child(auth.currentUser?.uid.toString())
 
         binding.movieRecyclerView.setHasFixedSize(true)
         binding.movieRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -73,16 +73,22 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
         binding.movieRecyclerView.adapter = movieAdapter
     }
 
-    private fun getMovieList(){
-        database.addValueEventListener(object : ValueEventListener{
+    private fun getMovieList() {
+        database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 movieList.clear()
-                for (movieSnapshot in snapshot.children){
-                    var newMovieHolder : HashMap<String, String> = movieSnapshot.value as HashMap<String, String>
-                    var newMovie = MovieData(movieSnapshot.key.toString() ,newMovieHolder["name"] as String, newMovieHolder["director"] as String, newMovieHolder["year"] as String, if (newMovieHolder["watched"] == null) false else newMovieHolder["watched"] as Boolean)
-                    if (newMovie != null) {
-                        movieList.add(newMovie as MovieData)
-                    }
+                for (movieSnapshot in snapshot.children) {
+                    val newMovieHolder: HashMap<String, String> =
+                        movieSnapshot.value as HashMap<String, String>
+                    val newMovie = MovieData(
+                        movieSnapshot.key.toString(),
+                        newMovieHolder["name"] as String,
+                        newMovieHolder["director"] as String,
+                        newMovieHolder["year"] as String,
+                        if (newMovieHolder["watched"] == null) false else newMovieHolder["watched"] as Boolean
+                    )
+                    movieList.add(newMovie as MovieData)
+
                 }
                 movieAdapter.notifyDataSetChanged()
             }
@@ -94,7 +100,7 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
     }
 
     override fun onSaveMovie(movie: MutableMap<String, String>, movieEdit: TextInputEditText) {
-        database.push().setValue(movie).addOnCompleteListener{
+        database.push().setValue(movie).addOnCompleteListener {
             if (it.isSuccessful) {
                 Toast.makeText(context, "movie added", Toast.LENGTH_SHORT).show()
                 movieEdit.text = null
@@ -102,20 +108,25 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
                 Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
             }
         }
-        movieAdapter.notifyDataSetChanged()
     }
 
 
     override fun onWatchedClicked(movieData: MovieData) {
         val map = HashMap<String, Any>()
-        val newMovie = MovieData(movieData.movieId, movieData.name, movieData.director, movieData.year, !movieData.watched)
+        val newMovie = MovieData(
+            movieData.movieId,
+            movieData.name,
+            movieData.director,
+            movieData.year,
+            !movieData.watched
+        )
         map[movieData.movieId] = newMovie
         database.updateChildren(map)
     }
 
     override fun onDeleteClicked(movieData: MovieData) {
         database.child(movieData.movieId).removeValue().addOnCompleteListener {
-            if(it.isSuccessful) {
+            if (it.isSuccessful) {
                 Toast.makeText(context, "movie removed", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
