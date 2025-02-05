@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">WATCHLIST</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="sign_up">sign up</string>
+    <string name="or">or</string>
+    <string name="sign_in">sign in</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="add_movie">Add movie</string>
+</resources>
