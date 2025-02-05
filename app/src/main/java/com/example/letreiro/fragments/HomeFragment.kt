@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.letreiro.R
 import com.example.letreiro.databinding.FragmentHomeBinding
 import com.example.letreiro.utils.MovieAdapter
 import com.example.letreiro.utils.MovieData
@@ -56,6 +57,12 @@ class HomeFragment : Fragment(), AddMovieDialogFragment.OnDialogNextBtnClickList
                 "AddMovieDialogFragment"
             )
         }
+
+        binding.exitButton.setOnClickListener {
+            auth.signOut()
+            navControl.navigate(R.id.action_homeFragment_to_signInFragment)
+        }
+
     }
 
 
